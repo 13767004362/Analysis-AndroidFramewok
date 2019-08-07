@@ -1,6 +1,6 @@
 
 
-androidStudio除了简单的单行调试外，还有需要高级用法。
+androidStudio除了简单的单行调试外，还有许多的调试高级用法。
 
 
 #### **Evaluate Expression弹窗**
