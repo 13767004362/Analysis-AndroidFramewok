@@ -1,5 +1,5 @@
 
-本项目用于记录Android 7.0 framework层源码的分析，将围绕应用程序Client端和系统服务Server、系统APP三部分讲解。
+本项目用于记录Android 7.0 framework层源码的分析，将围绕应用程序Client端和系统服务Server、系统APP三部分讲解。工作之余,闲时更新。
 
 **应用程序Client端的分析**
 
