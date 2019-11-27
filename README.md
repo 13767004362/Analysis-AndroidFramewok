@@ -15,3 +15,9 @@
 | ContentProvider启动过程| |
 
 
+**Android x 源码分析**
+
+| 知识点 | 描述 |
+| :---  | :---|
+| Lifecycle组件 |[Lifecycle 初始化和绑定Activity生命周期过程](https://github.com/13767004362/Analysis-AndroidFramewok/blob/master/document/Lifecycle%E5%88%86%E6%9E%90/Lifecycle%E5%88%86%E6%9E%90.md)  |
+
