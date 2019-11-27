@@ -1,4 +1,4 @@
-##**Android x中Lifecycle分析**
+## **Android x中Lifecycle分析**
 
 
 **1. FragmentActivity的Liecycle**:
@@ -113,7 +113,7 @@ public class ReportFragment extends Fragment {
 
 查看LifecycleRegistry可知，会记录LifecycleOwner的当前状态state，且将LifecycleObserver监听器一一对应的存储在Map中。
  
-```
+```java
 public class LifecycleRegistry extends Lifecycle {
     //用于保存观察者对应一些列的监听者
     private FastSafeIterableMap<LifecycleObserver, ObserverWithState> mObserverMap =
@@ -167,7 +167,7 @@ public class LifecycleRegistry extends Lifecycle {
 
 接下来，查看ObserverWithState是如何解析LifecycleObserver的：
 
-```
+```java
     static class ObserverWithState {
         State mState;
         GenericLifecycleObserver mLifecycleObserver;
@@ -181,7 +181,7 @@ public class LifecycleRegistry extends Lifecycle {
 ```
 接下来，查看Lifecycling如何 生成对应的 GenericLifecycleObserver对象：
 
-```
+```java
    @NonNull
     static GenericLifecycleObserver getCallback(Object object) {
        //... 省略部分代码，处理一些特殊的LifecycleObserver情况(FullLifecycleObserver、GenericLifecycleObserver)等
@@ -190,7 +190,7 @@ public class LifecycleRegistry extends Lifecycle {
 ```
 接下来，查看ReflectiveGenericLifecycleObserver的构造器：
 
-```
+```java
 class ReflectiveGenericLifecycleObserver implements GenericLifecycleObserver {
     private final Object mWrapped;
     private final CallbackInfo mInfo;
@@ -205,7 +205,7 @@ class ReflectiveGenericLifecycleObserver implements GenericLifecycleObserver {
 
 接下来，查看ClassesInfoCache是如何解析：将生命周期的方法解析进行存储，方便后续反射调用。
 
-```
+```java
    CallbackInfo getInfo(Class klass) {
         // 先从缓存中获取
         CallbackInfo existing = mCallbackMap.get(klass);
@@ -306,7 +306,7 @@ class ReflectiveGenericLifecycleObserver implements GenericLifecycleObserver {
 ```
 接下来，来到ObserverWithState中：ObserverWithState中的mLifecycleObserver是ReflectiveGenericLifecycleObserver。
 
-```
+```java
     static class ObserverWithState {
         State mState;
         GenericLifecycleObserver mLifecycleObserver;
@@ -322,7 +322,7 @@ class ReflectiveGenericLifecycleObserver implements GenericLifecycleObserver {
 
 接下来，查看ReflectiveGenericLifecycleObserver的onStateChanged() ：
 
-```
+```java
 class ReflectiveGenericLifecycleObserver implements GenericLifecycleObserver {
     private final Object mWrapped;
     private final CallbackInfo mInfo;
@@ -388,14 +388,14 @@ class ClassesInfoCache {
 
 
 
-##**App进程中Lifecycle模块的初始化和Activity的监听**
+## **App进程中Lifecycle模块的初始化和Activity的监听**
 
 在Studio中全局检索ProcessLifecycleOwner，查看其源码。
 
 
 **1. ProcessLifecycleOwner类**
 
-```
+```java
 public class ProcessLifecycleOwner implements LifecycleOwner {
 
     private ActivityInitializationListener mInitializationListener =
@@ -466,7 +466,7 @@ LifecycleDispatcher为App进程内每个Activity都添加一个对应的ReportFr
 
 实际上FragmentActivity已经添加过ReportFragment，但实际上，并不是全部的开发都会继承FragmentActivity。因此，为了Activity中正常使用(实现LifecycleOwner接口)，也需要去添加。
 
-```
+```java
 class LifecycleDispatcher {
 
     private static AtomicBoolean sInitialized = new AtomicBoolean(false);
