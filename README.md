@@ -19,5 +19,5 @@
 
 | 知识点 | 描述 |
 | :---  | :---|
-| Lifecycle组件 |[Lifecycle 初始化和绑定Activity生命周期过程](https://github.com/13767004362/Analysis-AndroidFramewok/blob/master/document/Lifecycle%E5%88%86%E6%9E%90/Lifecycle%E5%88%86%E6%9E%90.md)  |
+| [Lifecycle组件](https://github.com/13767004362/Analysis-AndroidFramewok/blob/master/document/Lifecycle%E5%88%86%E6%9E%90/Lifecycle%E5%88%86%E6%9E%90.md) |介绍Lifecycle组件的初始化和如何绑定Activity生命周期过程  |
 
