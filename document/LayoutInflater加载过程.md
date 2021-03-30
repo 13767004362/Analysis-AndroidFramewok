@@ -1,14 +1,17 @@
 
 
 第一种加载xml的布局方式：
+
 ```
   View.inflate();
 ```
 第二种加载xml的布局方式：
+
 ```
  LayoutInflater.from().inflate()；
 ```
 查看一下View.inflate()中的代码：
+
 ```java
 public static View inflate(Context context, @LayoutRes int resource, ViewGroup root) {
         LayoutInflater factory = LayoutInflater.from(context);
@@ -38,8 +41,8 @@ public static View inflate(Context context, @LayoutRes int resource, ViewGroup r
     }
 ```
 
-
 [ContextImpl](https://www.androidos.net.cn/android/7.0.0_r31/xref/frameworks/base/core/java/android/app/ContextImpl.java)中getSystemService():
+
 ```
    @Override
     public Object getSystemService(String name) {
@@ -48,6 +51,7 @@ public static View inflate(Context context, @LayoutRes int resource, ViewGroup r
 ```
 
 [SystemServiceRegistry](https://www.androidos.net.cn/android/7.0.0_r31/xref/frameworks/base/core/java/android/app/SystemServiceRegistry.java)中看下,是如何注册的LayoutInflater。
+
 ```java
 final class SystemServiceRegistry {
   private static final HashMap<String, ServiceFetcher<?>> SYSTEM_SERVICE_FETCHERS =
@@ -69,12 +73,14 @@ final class SystemServiceRegistry {
 ### **2. 获取XmlResourceParser对象**
 
 [LayoutInflater](https://www.androidos.net.cn/android/7.0.0_r31/xref/frameworks/base/core/java/android/view/LayoutInflater.java)的inflate():
+
 ```java
  public View inflate(@LayoutRes int resource, @Nullable ViewGroup root) {
         return inflate(resource, root, root != null);
 }
 ```
 重载的inflate():
+
 ```java
 public View inflate(@LayoutRes int resource, @Nullable ViewGroup root, boolean attachToRoot) {
         final Resources res = getContext().getResources();
@@ -89,12 +95,14 @@ public View inflate(@LayoutRes int resource, @Nullable ViewGroup root, boolean a
 ```
 
 查看下[Resources](https://www.androidos.net.cn/android/7.0.0_r31/xref/frameworks/base/core/java/android/content/res/Resources.java)的getLayout():
+
 ```java
 public XmlResourceParser getLayout(@LayoutRes int id) throws NotFoundException {
         return loadXmlResourceParser(id, "layout");
 }
 ```
 loadXmlResourceParser():
+
 ```java
  XmlResourceParser loadXmlResourceParser(@AnyRes int id, @NonNull String type)
             throws NotFoundException {
@@ -241,6 +249,7 @@ loadXmlResourceParser():
 先来看下xml最层为mergc的情况，看下如何解析。
 
 rInflate():
+
 ```java
 
  void rInflate(XmlPullParser parser, View parent, Context context,
@@ -294,6 +303,7 @@ rInflateChildren()实际上也是递归方式，调用rInflate()在解析。
 **接下来看下，是如何将xml中view标签解析成对应的view控件**。
 
 createViewFromTag():
+
 ```java
  private View createViewFromTag(View parent, String name, Context context, AttributeSet attrs) {
         return createViewFromTag(parent, name, context, attrs, false);
@@ -301,6 +311,7 @@ createViewFromTag():
 
 ```
 继续看下,重载的createViewFromTag():
+
 ```java
  View createViewFromTag(View parent, String name, Context context, AttributeSet attrs,
         boolean ignoreThemeAttr) {

@@ -1,6 +1,8 @@
 
 本项目用于记录Android 7.0 framework层源码的分析，将围绕应用程序Client端和系统服务Server、系统APP三部分讲解。工作之余,闲时更新。
 
+android Framework层 包含三个主要部分，分别是客户端(应用层app、系统app)、系统服务端、Linux驱动。
+
 **应用程序Client端的分析**
 
 | 知识点 | 描述 |
@@ -13,6 +15,16 @@
 | Service的创建过程| |
 | BroadcastReceiver注册和接受过程| |
 | ContentProvider启动过程| |
+
+
+**系统App分析**
+
+
+**系统服务端分析**
+
+
+
+
 
 
 **Android x 源码分析**

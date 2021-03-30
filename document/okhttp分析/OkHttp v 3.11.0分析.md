@@ -22,7 +22,7 @@
     return call;
   }
 ```
-若是对请求需要一些特别的，可以自定义EventListener。
+若是对请求需要一些特别的操作，监控执行状态，可以自定义EventListener。
 
 
 接下来，查看RealCall的构造器：
@@ -81,7 +81,7 @@
 
 ```java
   Response getResponseWithInterceptorChain() throws IOException {
-    // 开始添加一些列的拦截器
+    // 开始添加一些列的拦截器,	请求会逐个按添加的顺序传递处理。
     List<Interceptor> interceptors = new ArrayList<>();
     //先添加OkHttpClient端中配置的通用拦截器
     interceptors.addAll(client.interceptors());
@@ -93,6 +93,7 @@
     interceptors.add(new ConnectInterceptor(client));
     //默认forWebSocket为false,执行http请求,会添加OkHttpClient端中配置网络拦截器
     if (!forWebSocket) {
+      
       interceptors.addAll(client.networkInterceptors());
     }
     interceptors.add(new CallServerInterceptor(forWebSocket));
@@ -262,9 +263,12 @@
         }
         return response;
       }
+      
+      //请求失败的情况，会走以下逻辑，继续重试机制或者抛出异常结束。
+      
       //关闭响应的body
       closeQuietly(response.body());
-
+      // 重试次数超出上限，抛出异常
       if (++followUpCount > MAX_FOLLOW_UPS) {
         streamAllocation.release();
         throw new ProtocolException("Too many follow-up requests: " + followUpCount);
@@ -480,7 +484,7 @@
 
     // 需要确保网络请求的安全，但存在一种特殊的get方式请求(存在本地缓存的响应数据，但get方式去查看是否需要更新)
     boolean doExtensiveHealthChecks = !request.method().equals("GET");
-    // 从连接池中查找可用的connection。
+    // 根据请求的address生成对应的router,从连接池中查找可用的connection,若是没有，则创建一个新的RealConnection，同时根据address建立socket连接。
     HttpCodec httpCodec = streamAllocation.newStream(client, chain, doExtensiveHealthChecks);
     RealConnection connection = streamAllocation.connection();
     // 传递给下一个拦截器，执行网络请求，直到返回响应。
@@ -496,7 +500,7 @@
 ```java
   @Override public Response intercept(Chain chain) throws IOException {
     RealInterceptorChain realChain = (RealInterceptorChain) chain;
-    //若是http请求， 这里， HttpCodec是Http2Codec	.
+    //若是http请求， 这里根据协议， HttpCodec可能是Http1Codec或者Http2Codec	.
     HttpCodec httpCodec = realChain.httpStream();
     StreamAllocation streamAllocation = realChain.streamAllocation();
     RealConnection connection = (RealConnection) realChain.connection();
